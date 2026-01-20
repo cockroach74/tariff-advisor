@@ -8,6 +8,7 @@
 
 - **React** 19.1.0 - Frontend framework
 - **Create React App** (react-scripts 5.0.1) - Build tooling
+- **Tailwind CSS** 3.4.1 - Utility-first CSS framework
 - **Testing Library** - React component testing (@testing-library/react, @testing-library/jest-dom)
 - **web-vitals** - Performance monitoring
 
@@ -23,11 +24,13 @@ tariff-advisor/
 ├── src/                       # Application source code
 │   ├── App.js                 # Main TariffAdvisor component
 │   ├── App.css                # Component styles
-│   ├── App.test.js            # Test suite
+│   ├── App.test.js            # Test suite (6 tests)
 │   ├── index.js               # React DOM entry point
-│   ├── index.css              # Global styles
+│   ├── index.css              # Global styles + Tailwind directives
 │   ├── setupTests.js          # Jest configuration
 │   └── reportWebVitals.js     # Performance monitoring setup
+├── tailwind.config.js         # Tailwind CSS configuration
+├── postcss.config.js          # PostCSS configuration
 ├── package.json               # Dependencies and scripts
 └── README.md                  # CRA documentation
 ```
@@ -43,6 +46,9 @@ npm start
 
 # Run tests in watch mode
 npm test
+
+# Run tests once (CI mode)
+CI=true npm test
 
 # Create production build
 npm run build
@@ -88,22 +94,16 @@ Special handling: Organizations with "municipality" or "ngo" in name → "Munici
 - `useState` for local state management
 - Controlled form inputs
 - Event handlers follow `handleChange` naming pattern
+- Inline RadioGroup component for reusable form inputs
 
 ### Styling
 - Tailwind CSS utility classes in JSX (e.g., `className="max-w-3xl mx-auto p-8"`)
 - Responsive design patterns
+- Standard HTML form elements with Tailwind styling
 
-## Known Issues (Require Resolution)
-
-1. **Uninstalled UI Dependencies**: App.js imports from `@/components/ui/` (Card, Button, Input, Label, RadioGroup) which don't exist. These are shadcn/ui components that need to be installed or replaced.
-
-2. **Next.js Import in CRA**: Line 7 imports `Image from 'next/image'` which is incompatible with Create React App. Should use standard `<img>` tag or install next/image alternative.
-
-3. **Hardcoded Image Path**: Line 8 references `/mnt/data/InterHyve_Logo.jpg` - should use `public/InterHyve_Logo.jpg` or import from src.
-
-4. **Missing Tailwind CSS**: Uses Tailwind classes but Tailwind is not installed or configured.
-
-5. **Outdated Test**: `App.test.js` tests for "learn react" text which doesn't exist in the app.
+### Image Handling
+- Images in `public/` folder
+- Reference with `process.env.PUBLIC_URL + '/filename'`
 
 ## AI Assistant Guidelines
 
@@ -112,18 +112,16 @@ Special handling: Organizations with "municipality" or "ngo" in name → "Munici
 1. **Read before editing**: Always read files before modifying them
 2. **Preserve business logic**: The tariff calculation rules in `calculateTariff()` are business requirements - don't change without explicit request
 3. **Keep it simple**: This is a straightforward questionnaire app - avoid over-engineering
-
-### Before Fixing Known Issues
-
-The issues listed above require resolution before the app will run. When asked to fix:
-- Install shadcn/ui components OR replace with standard HTML/CSS
-- Replace Next.js Image with standard `<img>` tag
-- Fix image path to use public folder
-- Configure Tailwind CSS OR convert to standard CSS
+4. **Use Tailwind**: Continue using Tailwind CSS utility classes for styling
 
 ### Testing
 
-Run `npm test` after changes to ensure no regressions. Update `App.test.js` if component output changes.
+Run `npm test` after changes to ensure no regressions. The test suite includes:
+- Title rendering test
+- Form field rendering tests
+- Button rendering test
+- Recommendation display test
+- Client categorization tests (SOHO, Enterprise)
 
 ### Commit Guidelines
 
@@ -135,9 +133,12 @@ Run `npm test` after changes to ensure no regressions. Update `App.test.js` if c
 
 | Purpose | File |
 |---------|------|
-| Main app logic | `src/App.js:10-112` |
-| Tariff calculation | `src/App.js:27-42` |
-| Form state | `src/App.js:11-18` |
+| Main app logic | `src/App.js:3-155` |
+| Tariff calculation | `src/App.js:20-35` |
+| Form state | `src/App.js:4-11` |
+| RadioGroup component | `src/App.js:37-53` |
 | Entry point | `src/index.js` |
+| Tailwind config | `tailwind.config.js` |
+| Global CSS | `src/index.css` |
 | Dependencies | `package.json` |
 | Tests | `src/App.test.js` |
